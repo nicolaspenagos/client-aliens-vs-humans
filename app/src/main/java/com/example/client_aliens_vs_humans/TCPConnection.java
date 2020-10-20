@@ -8,6 +8,8 @@
  */
 package com.example.client_aliens_vs_humans;
 
+import android.util.Log;
+
 import com.example.client_aliens_vs_humans.events.OnMessageListener;
 
 import java.io.BufferedReader;
@@ -60,6 +62,7 @@ public class TCPConnection extends Thread{
             Socket socket = new Socket("192.168.20.36", 5000);
 
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            Log.e("debug", "hiho");
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             while(!killThread){
