@@ -59,7 +59,7 @@ public class TCPConnection extends Thread{
         try {
 
             killThread = false;
-            Socket socket = new Socket("192.168.20.36", 5000);
+            Socket socket = new Socket("192.168.0.19", 5000);
 
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             Log.e("debug", "hiho");
@@ -68,6 +68,9 @@ public class TCPConnection extends Thread{
             while(!killThread){
 
                 String msg = reader.readLine();
+
+                if(msg==null)
+                    break;
                 observer.onMessage(msg);
 
             }
