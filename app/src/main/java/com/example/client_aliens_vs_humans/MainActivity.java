@@ -10,6 +10,7 @@ package com.example.client_aliens_vs_humans;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,17 +18,32 @@ import android.widget.Toast;
 
 import com.example.client_aliens_vs_humans.events.OnMessageListener;
 import com.example.client_aliens_vs_humans.tcpmodel.Direction;
+import com.example.client_aliens_vs_humans.tcpmodel.Generic;
+import com.example.client_aliens_vs_humans.tcpmodel.Star;
 import com.google.gson.Gson;
 
 import java.util.UUID;
 
+/*
+ * This class will represent the connection activity.
+ */
 public class MainActivity extends AppCompatActivity implements OnMessageListener, View.OnClickListener{
 
+    // -------------------------------------
+    // Global assets
+    // -------------------------------------
     private TCPConnection tcp;
+
+
+    // -------------------------------------
+    // XML references
+    // -------------------------------------
     private Button upButton;
     private Button downButton;
     private Button rightBurron;
     private Button leftButton;
+    private Button button;
+    private Star star;
     private Gson gson;
 
     @Override
@@ -42,10 +58,16 @@ public class MainActivity extends AppCompatActivity implements OnMessageListener
         downButton = findViewById(R.id.downButton);
         rightBurron = findViewById(R.id.rightButton);
         leftButton = findViewById(R.id.leftButton);
+        button = findViewById(R.id.button);
 
-        tcp = TCPConnection.getInstance();
-        tcp.setObserver(this);
-        tcp.start();
+        button.setOnClickListener((v)->{
+            Intent i = new Intent(this, ControllerActivity.class);
+            startActivity(i);
+        });
+
+        //tcp = TCPConnection.getInstance();
+        // tcp.setObserver(this);
+       // tcp.start();
 
         upButton.setOnClickListener(this);
         downButton.setOnClickListener(this);
@@ -56,7 +78,21 @@ public class MainActivity extends AppCompatActivity implements OnMessageListener
 
     @Override
     public void onMessage(String msg) {
-        runOnUiThread(()->Toast.makeText(this, msg, Toast.LENGTH_SHORT).show());
+        //runOnUiThread(()->Toast.makeText(this, msg, Toast.LENGTH_SHORT).show());
+        Generic generic = gson.fromJson(msg, Generic.class);
+
+        switch (generic.type){
+
+            case "Star":
+
+                Star currentStar = gson.fromJson(msg, Star.class);
+                star = currentStar;
+
+                break;
+
+        }
+
+
     }
 
     @Override
