@@ -66,7 +66,7 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
         leftArrowButton = findViewById(R.id.imageViewLeftArrow);
         putButton = findViewById(R.id.imageViewPut);
 
-        player = 0;
+        player = getIntent().getExtras().getInt("player", 0);
 
         walkerButton.setOnClickListener(this);
         shooterButton.setOnClickListener(this);
