@@ -13,18 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.client_aliens_vs_humans.events.OnMessageListener;
-import com.example.client_aliens_vs_humans.tcpmodel.Direction;
 import com.example.client_aliens_vs_humans.tcpmodel.Generic;
 import com.example.client_aliens_vs_humans.tcpmodel.PlayerNumber;
 import com.example.client_aliens_vs_humans.tcpmodel.Star;
 import com.google.gson.Gson;
-
-import java.util.UUID;
 
 /*
  * This class will represent the connection activity.
@@ -44,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements OnMessageListener
     // -------------------------------------
     // XML references
     // -------------------------------------
-    private Button button;
+    private Button connectButton;
     private Star star;
     private Gson gson;
 
@@ -56,16 +51,15 @@ public class MainActivity extends AppCompatActivity implements OnMessageListener
 
         gson = new Gson();
 
-        button = findViewById(R.id.button);
+        connectButton = findViewById(R.id.connectButton);
 
-        button.setOnClickListener((v) -> {
-            Intent i = new Intent(this, ControllerActivity.class);
-            startActivity(i);
+        connectButton.setOnClickListener((v) -> {
+
+            tcp = TCPConnection.getInstance();
+            tcp.setObserver(this);
+            tcp.start();
+
         });
-
-        tcp = TCPConnection.getInstance();
-        tcp.setObserver(this);
-        tcp.start();
 
     }
 
