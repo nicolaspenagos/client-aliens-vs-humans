@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements OnMessageListener
     // XML references
     // -------------------------------------
     private Button connectButton;
-    private Star star;
     private Gson gson;
 
     @Override
@@ -65,17 +64,10 @@ public class MainActivity extends AppCompatActivity implements OnMessageListener
 
     @Override
     public void onMessage(String msg) {
-        //runOnUiThread(()->Toast.makeText(this, msg, Toast.LENGTH_SHORT).show());
+
         Generic generic = gson.fromJson(msg, Generic.class);
 
         switch (generic.type) {
-
-            case "Star":
-
-                Star currentStar = gson.fromJson(msg, Star.class);
-                star = currentStar;
-
-                break;
 
             case "PlayerNumber":
 

@@ -17,13 +17,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.client_aliens_vs_humans.events.OnMessageListener;
 import com.example.client_aliens_vs_humans.model.Player;
+import com.example.client_aliens_vs_humans.tcpmodel.Direction;
+import com.example.client_aliens_vs_humans.tcpmodel.Generic;
+import com.example.client_aliens_vs_humans.tcpmodel.Star;
 import com.google.gson.Gson;
+
+import java.util.UUID;
 
 /*
  * This class will represents the controller of the each player.
  */
-public class ControllerActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener{
+public class ControllerActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener, OnMessageListener {
 
     // -------------------------------------
     // XML references
@@ -36,12 +42,14 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
     private ImageView rightArrowButton;
     private ImageView leftArrowButton;
     private ImageView putButton;
+    private ImageView starButton;
 
     // -------------------------------------
     // Global assets
     // -------------------------------------
     private TCPConnection tcp;
     private Gson gson;
+    private Star star;
 
     // -------------------------------------
     // Global variables
@@ -65,12 +73,18 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
         rightArrowButton = findViewById(R.id.imageViewRightArrow);
         leftArrowButton = findViewById(R.id.imageViewLeftArrow);
         putButton = findViewById(R.id.imageViewPut);
+        starButton = findViewById(R.id.imageViewStar);
 
         player = getIntent().getExtras().getInt("player", 0);
+        tcp = TCPConnection.getInstance();
+        tcp.setObserver(this);
+
+        gson = new Gson();
 
         walkerButton.setOnClickListener(this);
         shooterButton.setOnClickListener(this);
         bombButton.setOnClickListener(this);
+        starButton.setOnClickListener(this);
 
         upArrowButton.setOnTouchListener(this);
         downArrowButton.setOnTouchListener(this);
@@ -90,6 +104,7 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
     public boolean onTouch(View view, MotionEvent event) {
 
         int option;
+        Direction direction;
 
         switch (view.getId()){
 
@@ -98,7 +113,11 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
                 option = event.getAction();
 
                 if(option == MotionEvent.ACTION_DOWN){
+
                     upArrowButton.setImageResource(R.drawable.up_arrow_pressed);
+                    direction = new Direction(UUID.randomUUID().toString(), Direction.UP, "Direction of the movement");
+                    tcp.sendMessage(gson.toJson(direction));
+
                 }else if(option == MotionEvent.ACTION_UP){
                     upArrowButton.setImageResource(R.drawable.up_arrow);
                 }
@@ -110,7 +129,11 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
                 option = event.getAction();
 
                 if(option == MotionEvent.ACTION_DOWN){
+
                     downArrowButton.setImageResource(R.drawable.down_arrow_pressed);
+                    direction = new Direction(UUID.randomUUID().toString(), Direction.DOWN, "Direction of the movement");
+                    tcp.sendMessage(gson.toJson(direction));
+
                 }else if(option == MotionEvent.ACTION_UP){
                     downArrowButton.setImageResource(R.drawable.down_arrow);
                 }
@@ -122,7 +145,11 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
                 option = event.getAction();
 
                 if(option == MotionEvent.ACTION_DOWN){
+
                     rightArrowButton.setImageResource(R.drawable.right_arrow_pressed);
+                    direction = new Direction(UUID.randomUUID().toString(), Direction.RIGHT, "Direction of the movement");
+                    tcp.sendMessage(gson.toJson(direction));
+
                 }else if(option == MotionEvent.ACTION_UP){
                     rightArrowButton.setImageResource(R.drawable.right_arrow);
                 }
@@ -134,7 +161,11 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
                 option = event.getAction();
 
                 if(option == MotionEvent.ACTION_DOWN){
+
                     leftArrowButton.setImageResource(R.drawable.left_arrow_pressed);
+                    direction = new Direction(UUID.randomUUID().toString(), Direction.LEFT, "Direction of the movement");
+                    tcp.sendMessage(gson.toJson(direction));
+
                 }else if(option == MotionEvent.ACTION_UP){
                     leftArrowButton.setImageResource(R.drawable.left_arrow);
                 }
@@ -154,7 +185,9 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
                 break;
 
         }
+
         return true;
+
     }
 
 
@@ -212,6 +245,48 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
                     walkerButton.setImageResource(R.drawable.aliens_walker);
                     shooterButton.setImageResource(R.drawable.shooter_aliens);
                     bombButton.setImageResource(R.drawable.pressed_aliens_bomb);
+
+                }
+
+                break;
+
+            case R.id.imageViewStar:
+
+                if(star.getOwner()==3){
+
+                    star.setOwner(player);
+                    tcp.sendMessage(gson.toJson(star));
+                    starButton.setImageResource(R.drawable.star_pressed);
+
+                }
+
+
+                break;
+
+        }
+
+    }
+
+    // -------------------------------------
+    // Tcp methods
+    // -------------------------------------
+    @Override
+    public void onMessage(String msg) {
+
+        Generic generic = gson.fromJson(msg, Generic.class);
+
+        switch (generic.type) {
+
+            case "Star":
+
+                Star currentStar = gson.fromJson(msg, Star.class);
+
+                if(currentStar.getOwner()==-1) {
+                    starButton.setImageResource(R.drawable.star_pressed);
+                }else{
+
+                    star = currentStar;
+                    starButton.setImageResource(R.drawable.star);
 
                 }
 

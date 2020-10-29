@@ -67,6 +67,7 @@ public class TCPConnection extends Thread{
             while(!killThread){
 
                 String msg = reader.readLine();
+                Log.e(">>>", msg);
 
                 if(msg==null)
                     break;
@@ -88,6 +89,7 @@ public class TCPConnection extends Thread{
 
                     try {
 
+                        Log.e(">>>", msg);
                         writer.write(msg+"\n");
                         writer.flush();
 
