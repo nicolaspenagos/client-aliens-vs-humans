@@ -281,7 +281,7 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
 
                 Star currentStar = gson.fromJson(msg, Star.class);
 
-                if(currentStar.getOwner()==-1) {
+                if(currentStar.getOwner()==Star.OWNED_STAR) {
                     starButton.setImageResource(R.drawable.star_pressed);
                 }else{
 
