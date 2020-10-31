@@ -22,6 +22,7 @@ import com.example.client_aliens_vs_humans.model.Player;
 import com.example.client_aliens_vs_humans.tcpmodel.Direction;
 import com.example.client_aliens_vs_humans.tcpmodel.Generic;
 import com.example.client_aliens_vs_humans.tcpmodel.Star;
+import com.example.client_aliens_vs_humans.tcpmodel.Character;
 import com.google.gson.Gson;
 
 import java.util.UUID;
@@ -194,6 +195,8 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
     @Override
     public void onClick(View view) {
 
+        Character character;
+
         switch (view.getId()){
 
             case R.id.imageViewWalker:
@@ -203,12 +206,16 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
                     walkerButton.setImageResource(R.drawable.pressed_human_walker);
                     shooterButton.setImageResource(R.drawable.human_shooter);
                     bombButton.setImageResource(R.drawable.human_bomb);
+                    character = new Character(UUID.randomUUID().toString(), Character.HUMAN_WALKER_PRESSED, "The character pressed by the player");
+                    tcp.sendMessage(gson.toJson(character));
 
                 }else if(player == Player.PLAYER2){
 
                     walkerButton.setImageResource(R.drawable.pressed_aliens_walker);
                     shooterButton.setImageResource(R.drawable.shooter_aliens);
                     bombButton.setImageResource(R.drawable.aliens_bomb);
+                    character = new Character(UUID.randomUUID().toString(), Character.ALIEN_WALKER_PRESSED, "The character pressed by the player");
+                    tcp.sendMessage(gson.toJson(character));
 
                 }
 
@@ -221,12 +228,16 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
                     walkerButton.setImageResource(R.drawable.human_walker);
                     shooterButton.setImageResource(R.drawable.pressed_human_shooter);
                     bombButton.setImageResource(R.drawable.human_bomb);
+                    character = new Character(UUID.randomUUID().toString(), Character.HUMAN_SHOOTER_PRESSED, "The character pressed by the player");
+                    tcp.sendMessage(gson.toJson(character));
 
                 }else if(player == Player.PLAYER2){
 
                     walkerButton.setImageResource(R.drawable.aliens_walker);
                     shooterButton.setImageResource(R.drawable.pressed_aliens_shooter);
                     bombButton.setImageResource(R.drawable.aliens_bomb);
+                    character = new Character(UUID.randomUUID().toString(), Character.ALIEN_SHOOTER_PRESSED, "The character pressed by the player");
+                    tcp.sendMessage(gson.toJson(character));
 
                 }
 
@@ -239,12 +250,16 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
                     walkerButton.setImageResource(R.drawable.human_walker);
                     shooterButton.setImageResource(R.drawable.human_shooter);
                     bombButton.setImageResource(R.drawable.pressed_human_bomb);
+                    character = new Character(UUID.randomUUID().toString(), Character.HUMAN_BOMB_PRESSED, "The character pressed by the player");
+                    tcp.sendMessage(gson.toJson(character));
 
                 }else if(player == Player.PLAYER2){
 
                     walkerButton.setImageResource(R.drawable.aliens_walker);
                     shooterButton.setImageResource(R.drawable.shooter_aliens);
                     bombButton.setImageResource(R.drawable.pressed_aliens_bomb);
+                    character = new Character(UUID.randomUUID().toString(), Character.ALIEN_BOMB_PRESSED, "The character pressed by the player");
+                    tcp.sendMessage(gson.toJson(character));
 
                 }
 
