@@ -21,6 +21,7 @@ import com.example.client_aliens_vs_humans.events.OnMessageListener;
 import com.example.client_aliens_vs_humans.model.Player;
 import com.example.client_aliens_vs_humans.tcpmodel.Direction;
 import com.example.client_aliens_vs_humans.tcpmodel.Generic;
+import com.example.client_aliens_vs_humans.tcpmodel.Put;
 import com.example.client_aliens_vs_humans.tcpmodel.Star;
 import com.example.client_aliens_vs_humans.tcpmodel.Character;
 import com.google.gson.Gson;
@@ -176,6 +177,8 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
             case R.id.imageViewPut:
 
                 option = event.getAction();
+                Put put = new Put(UUID.randomUUID().toString(), "The action of put a charcater");
+                tcp.sendMessage(gson.toJson(put));
 
                 if(option == MotionEvent.ACTION_DOWN){
                         putButton.setImageResource(R.drawable.put_pressed);
