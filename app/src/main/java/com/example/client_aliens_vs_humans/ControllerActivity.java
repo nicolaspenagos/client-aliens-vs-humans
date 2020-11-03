@@ -16,12 +16,14 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.client_aliens_vs_humans.events.OnMessageListener;
 import com.example.client_aliens_vs_humans.model.Player;
 import com.example.client_aliens_vs_humans.tcpmodel.Direction;
 import com.example.client_aliens_vs_humans.tcpmodel.Generic;
 import com.example.client_aliens_vs_humans.tcpmodel.Put;
+import com.example.client_aliens_vs_humans.tcpmodel.Score;
 import com.example.client_aliens_vs_humans.tcpmodel.Star;
 import com.example.client_aliens_vs_humans.tcpmodel.Character;
 import com.google.gson.Gson;
@@ -45,6 +47,7 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
     private ImageView leftArrowButton;
     private ImageView putButton;
     private ImageView starButton;
+    private TextView scoreTextView;
 
     // -------------------------------------
     // Global assets
@@ -76,6 +79,7 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
         leftArrowButton = findViewById(R.id.imageViewLeftArrow);
         putButton = findViewById(R.id.imageViewPut);
         starButton = findViewById(R.id.imageViewStar);
+        scoreTextView = findViewById(R.id.scoreTextView);
 
         player = getIntent().getExtras().getInt("player", 0);
         tcp = TCPConnection.getInstance();
@@ -307,6 +311,14 @@ public class ControllerActivity extends AppCompatActivity implements View.OnTouc
                     starButton.setImageResource(R.drawable.star);
 
                 }
+
+                break;
+
+            case "Score":
+
+                Score score = gson.fromJson(msg, Score.class);
+                int score_ = score.getScore();
+                scoreTextView.setText("SCORE: "+score_);
 
                 break;
 
